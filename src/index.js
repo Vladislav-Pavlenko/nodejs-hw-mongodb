@@ -5,4 +5,5 @@ const startApp = async () => {
   await initMongoConnection();
   setupServer();
 };
+
 startApp();
