@@ -1,8 +1,33 @@
 import * as contactsServices from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import parsePaginationParams from '../utils/parsePaginationParams.js';
+import parseSortParams from '../utils/parseSortParams.js';
+import { allowedSortByFields } from '../constants/contacts.js';
+import parseContactType from '../utils/filters/parseContactType.js';
+import parseIsFavourite from '../utils/filters/parseIsFavourite.js';
 
 export const getAllContactsController = async (req, res) => {
-  const data = await contactsServices.getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams({
+    ...req.query,
+    allowedSortByFields,
+  });
+
+  const filter = req.query;
+  let filteredQuery = null;
+  if ('contactType' in filter) {
+    filteredQuery = parseContactType(filter);
+  }
+  if ('isFavourite' in filter) {
+    filteredQuery = parseIsFavourite(filter);
+  }
+  const data = await contactsServices.getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filteredQuery,
+  });
   res.json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -36,7 +61,6 @@ export const createNewContactController = async (req, res) => {
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const data = await contactsServices.deleteContact(contactId);
-  console.log(data);
   if (!data) {
     next(createHttpError(404, `Contact with id=${contactId} not found`));
     return;
