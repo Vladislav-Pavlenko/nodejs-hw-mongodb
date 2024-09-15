@@ -11,12 +11,11 @@ export const getAllContacts = async ({
 }) => {
   const skip = (page - 1) * perPage;
   const contactsQuery = ContactsCollection.find();
-
   if (filteredQuery) {
     contactsQuery.where({ contactType: filteredQuery });
   }
   if (filteredQuery !== undefined) {
-    contactsQuery.where({ isFavourite: filteredQuery });
+    contactsQuery.where({ isFavourite: Boolean(filteredQuery) });
   }
   const contacts = await contactsQuery
     .skip(skip)
