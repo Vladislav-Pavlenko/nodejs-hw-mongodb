@@ -7,15 +7,15 @@ export const getAllContacts = async ({
   perPage,
   sortBy = '_id',
   sortOrder = SORT_ORDER[0],
-  filteredQuery = {},
+  filter = {},
 }) => {
   const skip = (page - 1) * perPage;
   const contactsQuery = ContactsCollection.find();
-  if (filteredQuery) {
-    contactsQuery.where({ contactType: filteredQuery });
+  if (filter.contactType) {
+    contactsQuery.where({ contactType: filter.contactType });
   }
-  if (filteredQuery !== undefined) {
-    contactsQuery.where({ isFavourite: Boolean(filteredQuery) });
+  if (filter.isFavourite) {
+    contactsQuery.where({ isFavourite: filter.isFavourite });
   }
   const contacts = await contactsQuery
     .skip(skip)

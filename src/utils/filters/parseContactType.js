@@ -1,9 +1,9 @@
 import createHttpError from 'http-errors';
 
-const parseContactType = ({ contactType }) => {
+const parseContactType = (contactType) => {
   const validValues = ['home', 'personal', 'work'];
 
-  if (typeof contactType === 'string' && validValues.includes(contactType)) {
+  if (validValues.includes(contactType)) {
     return contactType;
   }
 
