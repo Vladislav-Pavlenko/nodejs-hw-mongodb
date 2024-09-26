@@ -21,6 +21,7 @@ export const setupServer = () => {
     }),
   );
   app.use(cookieParser());
+  express.static('uploads');
 
   app.use('/contacts', contactsRouter);
   app.use('/auth', authRouter);
