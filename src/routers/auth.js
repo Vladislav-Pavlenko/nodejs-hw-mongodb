@@ -8,13 +8,17 @@ import {
   resetPasswordSchema,
 } from '../validation/users.js';
 import {
+  getGoogleOAuthUrlController,
   loginUserController,
+  loginWidthGoogleController,
   refreshController,
   registerUserController,
   requestResetEmailController,
   resetPasswordController,
   signoutController,
 } from '../controllers/auth.js';
+import { loginWithGoogleOAuthSchema } from '../validation/contacts.js';
+
 const authRouter = Router();
 authRouter.post(
   '/register',
@@ -37,5 +41,11 @@ authRouter.post(
   '/reset-pwd',
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
+);
+authRouter.get('/get-oauth-url', ctrlWrapper(getGoogleOAuthUrlController));
+authRouter.post(
+  '/confirm-oauth',
+  validateBody(loginWithGoogleOAuthSchema),
+  ctrlWrapper(loginWidthGoogleController),
 );
 export default authRouter;
