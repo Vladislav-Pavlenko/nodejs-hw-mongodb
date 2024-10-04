@@ -25,3 +25,7 @@ export const updateContactsSchema = Joi.object({
   createdAt: Joi.date().optional(),
   updatedAt: Joi.date().optional(),
 });
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+  code: Joi.string().required(),
+});
